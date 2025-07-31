@@ -11,4 +11,4 @@ COPY . .
 RUN python -c 'from app import init_db; init_db()'
 
 # 🚀 เริ่ม Gunicorn (Render จะเรียกอันนี้)
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app.py"]
