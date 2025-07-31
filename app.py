@@ -23,8 +23,9 @@ DEALER_PASSWORD = os.getenv("DEALER_PASSWORD")
 
 # --- Initialize Flask App and LINE SDK ---
 app = Flask(__name__)
-line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(CHANNEL_SECRET)
+# ลบการสร้าง LineBotApi และ WebhookHandler ตรงนี้ เพื่อย้ายไปสร้างในฟังก์ชัน Handle_message แทน
+# line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+# handler = WebhookHandler(CHANNEL_SECRET)
 
 # --- Database Name ---
 DB_NAME = 'users.db'
@@ -98,6 +99,10 @@ async def search_user_info(fname, lname, phone):
         return billing_info
 
 # ====== 4. ส่วนเชื่อมต่อกับ LINE (Webhook) ======
+# สร้าง handler และ line_bot_api ในภายหลัง
+handler = WebhookHandler(CHANNEL_SECRET)
+line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
+
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
@@ -114,7 +119,7 @@ def handle_message(event):
     user_message = event.message.text.strip()
     reply_token = event.reply_token
     user_id = event.source.user_id
-
+    
     # --- A: ตรวจสอบว่าเป็นคำสั่งจาก Admin หรือไม่ ---
     if user_id == ADMIN_USER_ID and user_message.lower().startswith('add '):
         try:
