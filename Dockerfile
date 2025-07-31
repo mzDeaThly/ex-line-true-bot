@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/playwright/python:v1.44.0
-
+RUN python init_db.py
 WORKDIR /app
 
 COPY requirements.txt .
